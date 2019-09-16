@@ -33,9 +33,8 @@ class Predis
         }
 
         try {
-            $redisConfig = env('redis');
             $this->redis = new \Redis();
-            $result = $this->redis->connect($redisConfig['host'], $redisConfig['port'], $redisConfig['time_out']);
+            $result = $this->redis->connect(env("redis.host"), env("redis.port"), env("redis.time_out"));
         } catch(\Exception $e) {
             throw new \Exception("redis服务异常");
         }
@@ -44,7 +43,7 @@ class Predis
             throw new \Exception("redis 链接失败");
         }
 
-        $password = $redisConfig['password'] ?? '';
+        $password = env("redis.password") ?? '';
         if( !empty($password) ){
             $result = $this->redis->auth('password');
             if($result === false) {
